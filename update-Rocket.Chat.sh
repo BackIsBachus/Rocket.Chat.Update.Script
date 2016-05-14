@@ -14,13 +14,15 @@ OLD_SUM=$(sha256sum -b $INSTALL_DIR$ARCHIVE_NAME | awk '{print $1}')
 echo "Checking the tarball hash..."
 if [ "$NEW_SUM" != "$OLD_SUM" ]
 then
+  OLD_DIR=$(pwd)
+  DATE=`date +%Y-%m-%d`
   echo "Newer version available, proceding with update!"
   echo "Stopping Rocket.Chat!"
   systemctl stop rocketchat.service
   mv $TMP_DIR$ARCHIVE_NAME $INSTALL_DIR$ARCHIVE_NAME
-  DATE=`date +%Y-%m-%d`
   echo "Creating a backup of the server..."
-  tar zcf $INSTALL_DIR"backup_"$DATE".tgz" $INSTALL_DIR"bundle/"
+  cd $INSTALL_DIR
+  tar zcf "backup_"$DATE".tgz" "bundle/"
   echo "Unpacking new version..."
   tar zxf $INSTALL_DIR$ARCHIVE_NAME
   OLD_DIR=$(pwd)
@@ -29,7 +31,7 @@ then
   npm install
   cd $OLD_DIR
   echo "Setting the ownership of the files back to the user..."
-  chow -R $ROCKET_USER:$ROCKET_GROUP $INSTALL_DIR
+  chown -R $ROCKET_USER:$ROCKET_GROUP $INSTALL_DIR
   echo "Starting Rocket.Chat!"
   systemctl start rocketchat.service
   echo "Update complete!"
