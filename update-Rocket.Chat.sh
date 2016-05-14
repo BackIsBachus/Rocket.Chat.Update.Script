@@ -4,7 +4,7 @@ TMP_DIR="/tmp/"
 INSTALL_DIR="/var/lib/rocket.chat/"
 ROCKET_USER="rocketchat"
 ROCKET_GROUP="rocketchat"
-
+ROCKET_SERVICE="rocketchat"
 
 echo "Fetching latest tarball..."
 wget -q https://rocket.chat/releases/latest/download -O $TMP_DIR$ARCHIVE_NAME
@@ -18,7 +18,7 @@ then
   DATE=`date +%Y-%m-%d`
   echo "Newer version available, proceding with update!"
   echo "Stopping Rocket.Chat!"
-  systemctl stop rocketchat.service
+  systemctl stop $ROCKET_SERVICE".service"
   mv $TMP_DIR$ARCHIVE_NAME $INSTALL_DIR$ARCHIVE_NAME
   echo "Creating a backup of the server..."
   cd $INSTALL_DIR
@@ -33,7 +33,7 @@ then
   echo "Setting the ownership of the files back to the user..."
   chown -R $ROCKET_USER:$ROCKET_GROUP $INSTALL_DIR
   echo "Starting Rocket.Chat!"
-  systemctl start rocketchat.service
+  systemctl start $ROCKET_SERVICE".service"
   echo "Update complete!"
 else
   echo "No need to update this already the latest version!"
