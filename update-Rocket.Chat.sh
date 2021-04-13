@@ -7,7 +7,7 @@ ROCKET_GROUP="rocketchat"
 ROCKET_SERVICE="rocketchat"
 
 echo "Fetching latest tarball..."
-wget -q https://rocket.chat/releases/latest/download -O $TMP_DIR$ARCHIVE_NAME
+wget -q https://releases.rocket.chat/latest/download -O $TMP_DIR$ARCHIVE_NAME
 NEW_SUM=$(sha256sum -b $TMP_DIR$ARCHIVE_NAME | awk '{print $1}')
 OLD_SUM=$(sha256sum -b $INSTALL_DIR$ARCHIVE_NAME | awk '{print $1}')
 
